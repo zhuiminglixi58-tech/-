@@ -17,7 +17,7 @@ from datetime import datetime, timezone, timedelta
 # ── 配置 ──────────────────────────────────────────────────────────────────────
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 FEISHU_WEBHOOK_URL = os.environ["FEISHU_WEBHOOK_URL"]
-MODEL = "claude-opus-4-6"
+MODEL = "claude-sonnet-4-6"
 
 # 北京时间
 BJT = timezone(timedelta(hours=8))
@@ -357,7 +357,7 @@ def send_to_feishu(card: dict):
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     print(f"\n{'='*52}")
-    print(f"  每日财经案例精选（Claude Opus 4.6）· {today_str} {weekday_cn}")
+    print(f"  每日财经案例精选（Claude Sonnet 4.6）· {today_str} {weekday_cn}")
     print(f"{'='*52}\n")
 
     cases = fetch_five_cases()

@@ -9,7 +9,7 @@ on:
 
 jobs:
   run-daily-case:
-    name: Claude 联网搜索 & 飞书推送
+    name: Claude Sonnet 联网搜索 & 飞书推送
     runs-on: ubuntu-latest
     timeout-minutes: 20       # Claude 多轮 tool_call 留足时间
 
