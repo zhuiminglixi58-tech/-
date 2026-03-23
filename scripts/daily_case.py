@@ -56,7 +56,9 @@ def chat_with_search(system: str, user: str, max_tokens: int = 6000) -> str:
             messages=messages,
             max_tokens=max_tokens,
             tools=WEB_SEARCH_TOOL,
-            extra_body={"enable_thinking": False},
+            extra_body={
+                "thinking": {"type": "disabled"}
+            },
         )
 
         choice = response.choices[0]
@@ -81,33 +83,24 @@ def chat_with_search(system: str, user: str, max_tokens: int = 6000) -> str:
                     }
                     for tc in message.tool_calls
                 ],
-                # 关键：无论有没有，都显式带上
-                "reasoning_content": getattr(message, "reasoning_content", "") or "",
             }
-
-            print("DEBUG assistant_msg =", json.dumps(assistant_msg, ensure_ascii=False))
-
             messages.append(assistant_msg)
 
             for tc in message.tool_calls:
-                try:
-                    arguments = json.loads(tc.function.arguments or "{}")
-                except json.JSONDecodeError:
-                    arguments = {"raw_arguments": tc.function.arguments}
+                arguments = json.loads(tc.function.arguments or "{}")
 
+                # Moonshot 官方文档：$web_search 这里直接原样返回 arguments
                 messages.append({
                     "role": "tool",
                     "tool_call_id": tc.id,
-                    "name": tc.function.name,
                     "content": json.dumps(arguments, ensure_ascii=False),
                 })
 
-            print("DEBUG messages =", json.dumps(messages, ensure_ascii=False))
         else:
             return last_content
 
     return last_content
-
+    
 # ── Step 1: 筛选5个候选案例 ───────────────────────────────────────────────────
 def fetch_five_cases() -> list[dict]:
     print("▶ Step 1: Kimi 联网搜索，筛选5个案例...")
